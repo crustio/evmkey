@@ -11,7 +11,7 @@ var versionCmd = &cli.Command{
 	Aliases: []string{"v"},
 	Usage:   "Output the version number",
 	Action: func(cCtx *cli.Context) error {
-		fmt.Println("evmkey - v1.0.2")
+		fmt.Println("evmkey - v1.0.4")
 		return nil
 	},
 }
