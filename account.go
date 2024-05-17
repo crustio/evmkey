@@ -32,13 +32,22 @@ var accountCmd = &cli.Command{
 }
 
 func create(cCtx *cli.Context) error {
-	// get password
-	pwd, err := getInputPassword()
-	if err != nil {
-		return err
+	// get password from flag
+	pwd := ""
+	var err error
+	if cCtx.String("password") != "" { // handle root flag `-password`
+		pwd = cCtx.String("password")
 	}
+
+	// get password from input
 	if pwd == "" {
-		return errors.New("Password is empty")
+		pwd, err = getInputPassword()
+		if err != nil {
+			return err
+		}
+		if pwd == "" {
+			return errors.New("Password is empty")
+		}
 	}
 
 	// gen Mnemonic

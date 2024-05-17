@@ -17,9 +17,16 @@ var (
 		Usage: "keystore path",
 		Value: "./keystore",
 	}
+
+	PasswordFlag = &cli.StringFlag{
+		Name:  "password",
+		Usage: "set password",
+		Value: "", // set later
+	}
 )
 
 var rootFlags = []cli.Flag{
 	VersionFlag,
 	KeystorePathFlag,
+	PasswordFlag,
 }
