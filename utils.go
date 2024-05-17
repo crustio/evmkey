@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"os"
 	"strings"
@@ -8,27 +9,24 @@ import (
 	"golang.org/x/term"
 )
 
-func getInputPassword() (pwd string) {
+func getInputPassword() (pwd string, err error) {
 	fmt.Print("Enter Password: ")
 	password, err := term.ReadPassword(int(os.Stdin.Fd()))
 	if err != nil {
-		fmt.Fprintln(os.Stderr, "Error reading password")
-		return ""
+		return "", err
 	}
 	fmt.Println() // Print a new line after the password entry
 
 	fmt.Print("Confirm Password: ")
 	confirmPassword, err := term.ReadPassword(int(os.Stdin.Fd()))
 	if err != nil {
-		fmt.Fprintln(os.Stderr, "Error reading password")
-		return ""
+		return "", err
 	}
 	fmt.Println()
 
 	if strings.TrimSpace(string(password)) != strings.TrimSpace(string(confirmPassword)) {
-		fmt.Println("Passwords do not match.")
-		return ""
+		return "", errors.New("Passwords do not match")
 	}
 
-	return strings.TrimSpace(string(password))
+	return strings.TrimSpace(string(password)), nil
 }

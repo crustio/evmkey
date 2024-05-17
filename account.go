@@ -18,12 +18,12 @@ import (
 var accountCmd = &cli.Command{
 	Name:    "account",
 	Aliases: []string{"a"},
-	Usage:   "account manager",
+	Usage:   "Account manager",
 	Subcommands: []*cli.Command{
 		{
 			Name:    "new",
 			Aliases: []string{"n"},
-			Usage:   "create a new account",
+			Usage:   "Create a new account",
 			Action: func(cCtx *cli.Context) error {
 				return create(cCtx)
 			},
@@ -32,6 +32,15 @@ var accountCmd = &cli.Command{
 }
 
 func create(cCtx *cli.Context) error {
+	// get password
+	pwd, err := getInputPassword()
+	if err != nil {
+		return err
+	}
+	if pwd == "" {
+		return errors.New("Password is empty")
+	}
+
 	// gen Mnemonic
 	entropy, err := bip39.NewEntropy(128) // 128\192\256
 	if err != nil {
@@ -89,12 +98,6 @@ func create(cCtx *cli.Context) error {
 	// keystore
 	ks := keystore.NewKeyStore(keystoreDir, keystore.StandardScryptN, keystore.StandardScryptP)
 
-	// get password
-	pwd := getInputPassword()
-	if pwd == "" {
-		return errors.New("password is empty")
-	}
-
 	account, err := ks.ImportECDSA(privKey, pwd)
 	if err != nil {
 		return err
@@ -106,7 +109,7 @@ func create(cCtx *cli.Context) error {
 	if err != nil {
 		return err
 	}
-	log.Println("keystore saved: ", keystoreOutputPath)
+	log.Println("Keystore saved: ", keystoreOutputPath)
 
 	// output mnemonic
 	mnemonicOutputPath := path.Join(keystoreDir, fmt.Sprintf("%s.mnemonic", account.Address.Hex()))
@@ -114,6 +117,6 @@ func create(cCtx *cli.Context) error {
 	if err != nil {
 		return err
 	}
-	log.Println("mnemonic saved: ", mnemonicOutputPath)
+	log.Println("Mnemonic saved: ", mnemonicOutputPath)
 	return nil
 }

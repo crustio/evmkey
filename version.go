@@ -9,7 +9,7 @@ import (
 var versionCmd = &cli.Command{
 	Name:    "version",
 	Aliases: []string{"v"},
-	Usage:   "output the version number",
+	Usage:   "Output the version number",
 	Action: func(cCtx *cli.Context) error {
 		fmt.Println("evmkey - v1.0")
 		return nil
