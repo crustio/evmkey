@@ -1,6 +1,6 @@
 module github.com/crustio/evmkey
 
-go 1.21.6
+go 1.21
 
 require (
 	github.com/btcsuite/btcd v0.24.0
